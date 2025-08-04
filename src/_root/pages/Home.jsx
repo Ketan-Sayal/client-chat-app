@@ -5,7 +5,7 @@ import ChatArea from '../../lib/components/ChatArea';
 import { socket } from '../../server';
 
 const Home = () => {
-    const {user, user2, setOnlineUsers, isConnected, onlineUsers} = useAuthContext();
+    const {user, user2, setOnlineUsers, isConnected, onlineUsers, setMessages, messages} = useAuthContext();
     // console.log(user);
 
 
@@ -24,14 +24,21 @@ const Home = () => {
     const handleOnlingUsers = (users)=>{
         setOnlineUsers(users);
     }
+    const handleRecivedMessages = ({user, message})=>{
+      // console.log("message recived: ", message);
+      
+      if(user?._id === user2?._id){
+        setMessages([...messages, {left:true, message}]);
+      }
+    }
     socket.on("get-online-users", handleOnlingUsers);
+    socket.on("new-message-recived", handleRecivedMessages);
     return ()=>{
         socket.off("get-online-users", handleOnlingUsers);
+        socket.off("new-message-recived", handleRecivedMessages);
     }
-  }, [setOnlineUsers, socket]);
-
-  
-    console.log(user);
+  }, [setOnlineUsers, socket, messages]);
+    // console.log(user);
     
   return (
     <div className='w-full h-full flex items-center overflow-hidden'>

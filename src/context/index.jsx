@@ -11,6 +11,7 @@ export const AuthContextProvider = ({children})=>{
   const [isLoading, setIsLoading] = useState(false);
   const [user2, setUser2] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
+  const [messages, setMessages] = useState([]);
   const navigate = useNavigate();
   // check if user is alreADY LOGGED IN(through js cookies)
   useEffect(()=>{
@@ -59,7 +60,7 @@ export const AuthContextProvider = ({children})=>{
   }, []);
 
   return (
-    <AuthContext.Provider value={{isConnected, setUser, user, isLoading, onlineUsers, user2, setUser2, setOnlineUsers}}>
+    <AuthContext.Provider value={{isConnected, setUser, user, isLoading, onlineUsers, user2, setUser2, setOnlineUsers, messages, setMessages}}>
       {isLoading?(
         <p className='flex-center font-bold text-xl'>Loading...</p>
       ):(children)}

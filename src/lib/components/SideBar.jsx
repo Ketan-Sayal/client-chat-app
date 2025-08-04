@@ -32,7 +32,7 @@ const SideBar = ({onlineUsers, user}) => {
         
             return(
                 
-                    <UserCard key={onlineUser?.socketId} user={onlineUser?.userDetails}/>
+                    <UserCard key={onlineUser?.socketId} user={{...onlineUser?.userDetails, _id:onlineUser?.mongodbId, socketId:onlineUser?.socketId}}/>
                   );
                 }):(<div className='w-full h-full flex justify-center items-center'>
                   <p className='font-bold text-slate-700 text-3xl'>No User Found!</p>

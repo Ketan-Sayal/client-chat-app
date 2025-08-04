@@ -1,17 +1,40 @@
-import React from 'react'
 import { FaUserSecret } from 'react-icons/fa';
 import { FaVideo } from "react-icons/fa";
 import { AiOutlineSend } from "react-icons/ai";
 import { useForm } from 'react-hook-form';
+import Cookies from "js-cookie";
+import axios from 'axios';
+import { socket } from '../../server';
+import { useAuthContext } from '../../context/AuthContext';
+import { useEffect } from 'react';
 
 const ChatArea = ({user1, user2}) => {
+  const {setMessages, messages} = useAuthContext();
   // console.log(user2);
+
+  // get users messages
+  useEffect(()=>{
+    axios.get("")
+  }, [])
+
 
   const { register, handleSubmit } = useForm();
   const sendMessage = (data)=>{
-    console.log(data);
+    // console.log(data);
+    // console.log(user2?._id);
+
+    socket.emit("new-message", {user:user1, user2, message:data?.message});
     
-  }
+    setMessages([...messages, {left:false, message:data?.message}])
+
+    const token = Cookies.get("chat-app-token");
+    axios.post("/api/v1/messages/create", {...data, user2Id:user2?._id}, {
+      headers:{
+        token
+      }
+    }).then(()=>console.log("message saved!!!"))
+    .catch((err)=>console.log(err));
+  }// Both users have to send messages to connect
   
   return user1 && user2?(
     <div className='flex flex-col h-full'>
@@ -25,21 +48,30 @@ const ChatArea = ({user1, user2}) => {
         </div>
         <FaVideo className='w-8 cursor-pointer h-8'/>
       </div>
+      {/* Chat area: */}
       <div className='h-[84%] gap-20 w-full overflow-y-scroll overflow-x-hidden scrollbar px-2 py-4 flex flex-col'>
-        {/* {Sender} */}
-        <div className='relative w-[100%] bg-black'>
-          <div className='bg-green-500 absolute px-8 py-3 right-3 rounded-full w-fit rounded-br-none'>
-            <p className='text-white font-light text-lg max-w-64'>Hello</p>
-          </div>
-        </div>
+        {messages?.length > 0 && messages?.map((messageData)=>{
+          if(messageData.left){
+            {/* {Sender} */}
         {/**Reciver */}
-        <div className='relative w-full'>
+            return(
+              <div className='relative w-full'>
           <div className='bg-red-500 absolute px-8 py-3 left-3 rounded-full w-fit rounded-bl-none'>
-            <p className='text-white font-light text-lg  max-w-64'>Hii</p>
+            <p className='text-white font-light text-lg  max-w-64'>{messageData?.message}</p>
           </div>
         </div>
-        <div>
+            )
+          }
+          return (
+            <div className='relative w-[100%] bg-black'>
+          <div className='bg-green-500 absolute px-8 py-3 right-3 rounded-full w-fit rounded-br-none'>
+            <p className='text-white font-light text-lg max-w-64'>{messageData?.message}</p>
+          </div>
         </div>
+          )
+        })}
+      <div>
+      </div>
       </div>
       <form onSubmit={handleSubmit(sendMessage)} className='w-full h-[11%] p-4 bg-slate-800 flex gap-8 items-center'>
         <div className='flex flex-col justify-center gap-3 w-[90%] h-[90%]'>
