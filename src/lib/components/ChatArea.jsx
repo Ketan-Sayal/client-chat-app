@@ -1,11 +1,70 @@
 import React from 'react'
+import { FaUserSecret } from 'react-icons/fa';
+import { FaVideo } from "react-icons/fa";
+import { AiOutlineSend } from "react-icons/ai";
+import { useForm } from 'react-hook-form';
 
 const ChatArea = ({user1, user2}) => {
-  return (
-    <div>
-      Chat Area
+  // console.log(user2);
+
+  const { register, handleSubmit } = useForm();
+  const sendMessage = (data)=>{
+    console.log(data);
+    
+  }
+  
+  return user1 && user2?(
+    <div className='flex flex-col h-full'>
+      <div className='flex items-center h-[8.3%] px-2 py-3 border-b-slate-800 border-b-2 justify-between'>
+        <div className='w-full flex gap-3 items-center'>
+          {user2?.image?<img src={user2?.image} alt="user2-pic" className='w-8 cursor-pointer h-8 rounded-full' />:(<FaUserSecret size={40} className='rounded-full cursor-pointer'/>)}
+          <div className='flex flex-col'>
+            <p className='text-sm font-bold'>{user2?.username}</p>
+            <p className='text-xs font-light'>{user2?.email}</p>
+          </div>
+        </div>
+        <FaVideo className='w-8 cursor-pointer h-8'/>
+      </div>
+      <div className='h-[84%] gap-20 w-full overflow-y-scroll overflow-x-hidden scrollbar px-2 py-4 flex flex-col'>
+        {/* {Sender} */}
+        <div className='relative w-[100%] bg-black'>
+          <div className='bg-green-500 absolute px-8 py-3 right-3 rounded-full w-fit rounded-br-none'>
+            <p className='text-white font-light text-lg max-w-64'>Hello</p>
+          </div>
+        </div>
+        {/**Reciver */}
+        <div className='relative w-full'>
+          <div className='bg-red-500 absolute px-8 py-3 left-3 rounded-full w-fit rounded-bl-none'>
+            <p className='text-white font-light text-lg  max-w-64'>Hii</p>
+          </div>
+        </div>
+        <div>
+        </div>
+      </div>
+      <form onSubmit={handleSubmit(sendMessage)} className='w-full h-[11%] p-4 bg-slate-800 flex gap-8 items-center'>
+        <div className='flex flex-col justify-center gap-3 w-[90%] h-[90%]'>
+          <input 
+        {...register("message", {
+          required:{
+            message:"Message is required",
+            value:true
+          }
+        })}
+        type="text" autoComplete='off' className='text-4xl bg-transparent  outline-none p-8 focus:border h-[90%] focus:border-slate-600 rounded-full' placeholder='Message...'/>
+        
+        </div>
+        <button className='mx-3 text-center text-xl items-center h-fit w-fit font-bold px-4 py-3 flex gap-2 rounded-lg cursor-pointer hover:bg-slate-700'>
+          <AiOutlineSend size={34}/>
+        </button>
+        
+      </form>
+    </div>
+  ):(
+    <div className='w-full h-full flex justify-center items-center'>
+      <p className='font-bold text-xl rounded-full p-10 xl:text-5xl text-slate-600 bg-slate-800'>No user selected</p>
     </div>
   )
+  
 }
 
 export default ChatArea

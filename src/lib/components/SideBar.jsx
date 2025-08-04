@@ -27,16 +27,19 @@ const SideBar = ({onlineUsers, user}) => {
         onChange={(e)=>setSearch(e.target.value)}
         type="text" placeholder='Search here...' className='bg-slate-700 font-medium outline-none text-white xl:px-4 xl:py-3 px-3  py-2 w-full shadow shadow-slate-600 focus:border focus:border-slate-600'/>
       </div>
+      <div className='flex py-2 max-h-screen h-screen scrollbar flex-col overflow-y-scroll overflow-x-hidden text-white font-bold'>
       {usersShown?.length>0?usersShown?.map((onlineUser)=>{
         
             return(
-                <div key={onlineUser?.socketId} className='flex py-2 max-h-screen h-screen scrollbar flex-col overflow-y-scroll overflow-x-hidden text-white font-bold'>
-                    <UserCard  user={onlineUser?.userDetails}/>
-                </div>
-            );
-      }):(<p>No users</p>)}
+                
+                    <UserCard key={onlineUser?.socketId} user={onlineUser?.userDetails}/>
+                  );
+                }):(<div className='w-full h-full flex justify-center items-center'>
+                  <p className='font-bold text-slate-700 text-3xl'>No User Found!</p>
+                </div>)}
+      </div>
     </div>
   )
 }
 
-export default SideBar
+export default SideBar;

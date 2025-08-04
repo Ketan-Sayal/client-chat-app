@@ -28,7 +28,7 @@ const Home = () => {
     return ()=>{
         socket.off("get-online-users", handleOnlingUsers);
     }
-  }, [setOnlineUsers, onlineUsers, socket]);
+  }, [setOnlineUsers, socket]);
 
   
     console.log(user);
@@ -38,7 +38,7 @@ const Home = () => {
       <div className='flex-1/6 h-screen border-r-2 border-r-slate-800 max-h-screen'>
         <SideBar onlineUsers={onlineUsers} user={user}/>
       </div>
-      <div className='flex-1/2 h-screen px-2 py-3'>
+      <div className='flex-1/2 h-screen'>
         <ChatArea user1={user} user2={user2}/>
       </div>
     </div>
