@@ -6,16 +6,55 @@ import Cookies from "js-cookie";
 import axios from 'axios';
 import { socket } from '../../server';
 import { useAuthContext } from '../../context/AuthContext';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const ChatArea = ({user1, user2}) => {
   const {setMessages, messages} = useAuthContext();
+  const [loading, setLoading] = useState(false);
+  const [allMessages, setAllMessages] = useState(null);
+
+  /*Single object of all messages = {
+  left,
+  message
+  }*/
   // console.log(user2);
+  
 
   // get users messages
   useEffect(()=>{
-    axios.get("")
-  }, [])
+    setMessages([]);
+    if(user2){
+      setLoading(true);
+    const token = Cookies.get("chat-app-token");
+    axios.get(`/api/v1/messages/messages/${user2?._id}`, {
+      headers:{
+        token
+      }
+    }).then((res)=>{
+    const data = res?.data?.data;
+    // console.log(data);
+    const currUserMessages = data?.currUserMessages
+  .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+  .map(userData => ({...userData, left: false }));
+
+    const otherUserMessages = data?.otherUserMessages
+  .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+  .map(userData => ({...userData, left: true })); 
+    const mergedMessages = [
+    ...currUserMessages,
+    ...otherUserMessages
+    ];
+    const allMessages = mergedMessages.sort((a, b) =>
+  new Date(a.createdAt) - new Date(b.createdAt)
+);
+    setAllMessages(allMessages);
+    setLoading(false);
+
+    }).catch((err)=>{console.log(err);
+      setLoading(false);
+    });
+    }
+  }, [user2])
 
 
   const { register, handleSubmit } = useForm();
@@ -35,8 +74,20 @@ const ChatArea = ({user1, user2}) => {
     }).then(()=>console.log("message saved!!!"))
     .catch((err)=>console.log(err));
   }// Both users have to send messages to connect
+
+  if(!user2 || !user1){
+    return(
+    <div className='w-full h-full flex justify-center items-center'>
+      <p className='font-bold text-xl rounded-full p-10 xl:text-5xl text-slate-600 bg-slate-800'>No user selected</p>
+    </div>
+  )
+  }
+
+  if(loading){
+    return <p>Loading...</p>
+  }
   
-  return user1 && user2?(
+  return(
     <div className='flex flex-col h-full'>
       <div className='flex items-center h-[8.3%] px-2 py-3 border-b-slate-800 border-b-2 justify-between'>
         <div className='w-full flex gap-3 items-center'>
@@ -50,7 +101,28 @@ const ChatArea = ({user1, user2}) => {
       </div>
       {/* Chat area: */}
       <div className='h-[84%] gap-20 w-full overflow-y-scroll overflow-x-hidden scrollbar px-2 py-4 flex flex-col'>
-        {messages?.length > 0 && messages?.map((messageData)=>{
+        { allMessages && allMessages?.map((messageData)=>{
+            if(messageData.left){
+            {/* {Sender} */}
+        {/**Reciver */}
+            return(
+              <div className='relative w-full'>
+          <div className='bg-red-500 absolute px-8 py-3 left-3 rounded-full w-fit rounded-bl-none'>
+            <p className='text-white font-light text-lg  max-w-64'>{messageData?.message}</p>
+          </div>
+        </div>
+            )
+          }
+          return (
+            <div className='relative w-[100%] bg-black'>
+          <div className='bg-green-500 absolute px-8 py-3 right-3 rounded-full w-fit rounded-br-none'>
+            <p className='text-white font-light text-lg max-w-64'>{messageData?.message}</p>
+          </div>
+        </div>
+          )
+          })
+        }
+        {messages && messages?.length > 0 && messages?.map((messageData)=>{
           if(messageData.left){
             {/* {Sender} */}
         {/**Reciver */}
@@ -90,10 +162,6 @@ const ChatArea = ({user1, user2}) => {
         </button>
         
       </form>
-    </div>
-  ):(
-    <div className='w-full h-full flex justify-center items-center'>
-      <p className='font-bold text-xl rounded-full p-10 xl:text-5xl text-slate-600 bg-slate-800'>No user selected</p>
     </div>
   )
   

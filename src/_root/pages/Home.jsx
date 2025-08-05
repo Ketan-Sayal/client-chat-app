@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useAuthContext } from '../../context/AuthContext'
 import SideBar from '../../lib/components/SideBar';
 import ChatArea from '../../lib/components/ChatArea';
@@ -25,11 +25,7 @@ const Home = () => {
         setOnlineUsers(users);
     }
     const handleRecivedMessages = ({user, message})=>{
-      // console.log("message recived: ", message);
-      
-      if(user?._id === user2?._id){
-        setMessages([...messages, {left:true, message}]);
-      }
+        setMessages([...messages, {left:true, message, user}]);
     }
     socket.on("get-online-users", handleOnlingUsers);
     socket.on("new-message-recived", handleRecivedMessages);
@@ -37,7 +33,7 @@ const Home = () => {
         socket.off("get-online-users", handleOnlingUsers);
         socket.off("new-message-recived", handleRecivedMessages);
     }
-  }, [setOnlineUsers, socket, messages]);
+  }, [socket, messages, onlineUsers]);
     // console.log(user);
     
   return (
