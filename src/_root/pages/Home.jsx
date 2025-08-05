@@ -1,11 +1,13 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useAuthContext } from '../../context/AuthContext'
 import SideBar from '../../lib/components/SideBar';
 import ChatArea from '../../lib/components/ChatArea';
+import sound from "../../assets/sound.mp3";
 import { socket } from '../../server';
 
 const Home = () => {
     const {user, user2, setOnlineUsers, isConnected, onlineUsers, setMessages, messages} = useAuthContext();
+    const audioRef = useRef();
     // console.log(user);
 
 
@@ -29,6 +31,7 @@ const Home = () => {
       
         if(user?.mongodbId?.toString() === user2?._id?.toString()){
           setMessages([...messages, {left:true, message, user}]);
+          audioRef.current.play();
         }
     }
     socket.on("get-online-users", handleOnlingUsers);
@@ -42,6 +45,7 @@ const Home = () => {
     
   return (
     <div className='w-full h-full flex items-center overflow-hidden'>
+      <audio ref={audioRef} src={sound} className='hidden'></audio>
       <div className='flex-1/6 h-screen border-r-2 border-r-slate-800 max-h-screen'>
         <SideBar onlineUsers={onlineUsers} user={user}/>
       </div>

@@ -6,18 +6,23 @@ import Cookies from "js-cookie";
 import axios from 'axios';
 import { socket } from '../../server';
 import { useAuthContext } from '../../context/AuthContext';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const ChatArea = ({user1, user2}) => {
   const {setMessages, messages} = useAuthContext();
   const [loading, setLoading] = useState(false);
   const [allMessages, setAllMessages] = useState(null);
+  const bottomRef = useRef(null);
 
   /*Single object of all messages = {
   left,
   message
   }*/
   // console.log(user2);
+
+  useEffect(()=>{
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+  }, [user2, messages, allMessages]);
   
 
   // get users messages
@@ -142,6 +147,7 @@ const ChatArea = ({user1, user2}) => {
         </div>
           )
         })}
+        <div ref={bottomRef}/>
       <div>
       </div>
       </div>
