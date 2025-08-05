@@ -25,7 +25,11 @@ const Home = () => {
         setOnlineUsers(users);
     }
     const handleRecivedMessages = ({user, message})=>{
-        setMessages([...messages, {left:true, message, user}]);
+      // console.log(user);
+      
+        if(user?.mongodbId?.toString() === user2?._id?.toString()){
+          setMessages([...messages, {left:true, message, user}]);
+        }
     }
     socket.on("get-online-users", handleOnlingUsers);
     socket.on("new-message-recived", handleRecivedMessages);

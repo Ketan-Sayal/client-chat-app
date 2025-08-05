@@ -106,7 +106,7 @@ const ChatArea = ({user1, user2}) => {
             {/* {Sender} */}
         {/**Reciver */}
             return(
-              <div className='relative w-full'>
+              <div key={messageData?._id} className='relative w-full'>
           <div className='bg-red-500 absolute px-8 py-3 left-3 rounded-full w-fit rounded-bl-none'>
             <p className='text-white font-light text-lg  max-w-64'>{messageData?.message}</p>
           </div>
@@ -114,7 +114,7 @@ const ChatArea = ({user1, user2}) => {
             )
           }
           return (
-            <div className='relative w-[100%] bg-black'>
+            <div key={messageData?._id} className='relative w-[100%] bg-black'>
           <div className='bg-green-500 absolute px-8 py-3 right-3 rounded-full w-fit rounded-br-none'>
             <p className='text-white font-light text-lg max-w-64'>{messageData?.message}</p>
           </div>
@@ -122,12 +122,12 @@ const ChatArea = ({user1, user2}) => {
           )
           })
         }
-        {messages && messages?.length > 0 && messages?.map((messageData)=>{
+        {messages && messages?.length > 0 && messages?.map((messageData, i)=>{
           if(messageData.left){
             {/* {Sender} */}
         {/**Reciver */}
             return(
-              <div className='relative w-full'>
+              <div key={i} className='relative w-full'>
           <div className='bg-red-500 absolute px-8 py-3 left-3 rounded-full w-fit rounded-bl-none'>
             <p className='text-white font-light text-lg  max-w-64'>{messageData?.message}</p>
           </div>
@@ -135,7 +135,7 @@ const ChatArea = ({user1, user2}) => {
             )
           }
           return (
-            <div className='relative w-[100%] bg-black'>
+            <div key={i} className='relative w-[100%] bg-black'>
           <div className='bg-green-500 absolute px-8 py-3 right-3 rounded-full w-fit rounded-br-none'>
             <p className='text-white font-light text-lg max-w-64'>{messageData?.message}</p>
           </div>
