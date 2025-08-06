@@ -24,7 +24,7 @@ const Home = () => {
   useEffect(()=>{
     // console.log("Online users section called");
     const handleOnlingUsers = ({users, disconnectedUser})=>{
-        if(!disconnectedUser || disconnectedUser === null || disconnectedUser===undefined){
+        if(!disconnectedUser || disconnectedUser===undefined){
           setOnlineUsers(users);
         }else{
           setOnlineUsers((prev)=>(prev.map((prevOnlineUser)=>prevOnlineUser?.mongodbId!==disconnectedUser?.mongodbId?prevOnlineUser:null)));
@@ -32,6 +32,10 @@ const Home = () => {
     }
     const handleRecivedMessages = ({user, message})=>{
       // console.log(user);
+      console.log(user);
+      console.log(user2);
+      
+      
       
         if(user?.mongodbId?.toString() === user2?._id?.toString()){
           setMessages([...messages, {left:true, message, user}]);
@@ -50,7 +54,7 @@ const Home = () => {
         socket.off("get-online-users", handleOnlingUsers);
         socket.off("new-message-recived", handleRecivedMessages);
     }
-  }, [socket, messages, onlineUsers]);
+  }, [socket, messages, onlineUsers, setOnlineUsers]);
     // console.log(user);
     
   return (
