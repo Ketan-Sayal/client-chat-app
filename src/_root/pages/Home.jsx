@@ -23,16 +23,26 @@ const Home = () => {
 
   useEffect(()=>{
     // console.log("Online users section called");
-    const handleOnlingUsers = (users)=>{
-        setOnlineUsers(users);
+    const handleOnlingUsers = ({users, disconnectedUser})=>{
+        if(!disconnectedUser || disconnectedUser === null || disconnectedUser===undefined){
+          setOnlineUsers(users);
+        }else{
+          setOnlineUsers((prev)=>(prev.map((prevOnlineUser)=>prevOnlineUser?.mongodbId!==disconnectedUser?.mongodbId?prevOnlineUser:null)));
+        }
     }
     const handleRecivedMessages = ({user, message})=>{
       // console.log(user);
       
         if(user?.mongodbId?.toString() === user2?._id?.toString()){
           setMessages([...messages, {left:true, message, user}]);
-          audioRef.current.play();
+          
+        }else{
+          // console.log(user);
+          // console.log(onlineUsers);
+          
+          setOnlineUsers(prev=>(prev.map((prevOnlineUser)=>((prevOnlineUser?.mongodbId.toString() === user?.mongodbId.toString())?({...prevOnlineUser, unreadMessages:(parseInt(prevOnlineUser?.unreadMessages?.toString()))+1}):prevOnlineUser))));
         }
+        audioRef.current.play();
     }
     socket.on("get-online-users", handleOnlingUsers);
     socket.on("new-message-recived", handleRecivedMessages);

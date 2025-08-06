@@ -8,9 +8,9 @@ const SideBar = ({onlineUsers, user}) => {
     const [search, setSearch] = useState("");
     let usersShown = [];
     if(search && onlineUsers){
-      usersShown = onlineUsers?.filter((onlineUser)=>onlineUser.mongodbId !== user._id).filter((onlineUser)=>onlineUser?.userDetails.username?.toLowerCase()?.includes(search?.toLowerCase())||onlineUser?.userDetails.email?.toLowerCase()?.includes(search?.toLowerCase()));
+      usersShown = onlineUsers?.filter((onlineUser)=>onlineUser!==null)?.filter((onlineUser)=>onlineUser?.mongodbId !== user?._id).filter((onlineUser)=>onlineUser?.userDetails.username?.toLowerCase()?.includes(search?.toLowerCase())||onlineUser?.userDetails.email?.toLowerCase()?.includes(search?.toLowerCase()))?.sort((a, b)=>b?.unreadMessages - a?.unreadMessages);
     }else{
-      usersShown = onlineUsers?.filter((onlineUser)=>onlineUser.mongodbId !== user._id);
+      usersShown = onlineUsers?.filter((onlineUser)=>onlineUser!==null)?.filter((onlineUser)=>onlineUser?.mongodbId !== user?._id)?.sort((a, b)=>b?.unreadMessages - a?.unreadMessages);
     }
   return (
     <div className='flex flex-col overflow-hidden'>
@@ -32,7 +32,7 @@ const SideBar = ({onlineUsers, user}) => {
         
             return(
                 
-                    <UserCard key={onlineUser?.socketId} user={{...onlineUser?.userDetails, _id:onlineUser?.mongodbId, socketId:onlineUser?.socketId}}/>
+                    <UserCard key={onlineUser?.socketId} user={{...onlineUser?.userDetails, _id:onlineUser?.mongodbId, socketId:onlineUser?.socketId, unreadMessages:onlineUser?.unreadMessages}}/>
                   );
                 }):(<div className='w-full h-full flex justify-center items-center'>
                   <p className='font-bold text-slate-700 text-3xl'>No User Found!</p>
