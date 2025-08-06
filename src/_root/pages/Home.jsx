@@ -23,11 +23,13 @@ const Home = () => {
 
   useEffect(()=>{
     // console.log("Online users section called");
-    const handleOnlingUsers = ({users, disconnectedUser})=>{
-        if(!disconnectedUser || disconnectedUser===undefined){
+    const handleOnlingUsers = ({users, disconnectedUser, newUser})=>{
+        if(!disconnectedUser || disconnectedUser===undefined || onlineUsers?.length<=0){
           setOnlineUsers(users);
         }else{
+          // const newOnlineUsers = onlineUsers
           setOnlineUsers((prev)=>(prev.map((prevOnlineUser)=>prevOnlineUser?.mongodbId!==disconnectedUser?.mongodbId?prevOnlineUser:null)));
+          setOnlineUsers((prev)=>([...prev, newUser]));
         }
     }
     const handleRecivedMessages = ({user, message})=>{
