@@ -4,7 +4,7 @@ import {IoMdMicOff} from "react-icons/io"
 import { useAuthContext } from '../../context/AuthContext'
 import Video from './Video';
 import { MdCallEnd, MdMic } from 'react-icons/md';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { socket } from '../../server';
 
 const VideoComponent = ({hungUpCall}) => {
@@ -13,6 +13,12 @@ const VideoComponent = ({hungUpCall}) => {
     const [isCameraOn, setIsCameraOn] = useState(!!localStream?.getVideoTracks()[0].enabled || true);
     // console.log(peer, localStream);
     // const [isOtherUserClick, setOtherUser] = useState(true);
+
+  useEffect(()=>{
+    setIsCameraOn(localStream?.getVideoTracks()[0].enabled);
+    setIsMicOn(!!localStream?.getAudioTracks()[0].enabled);
+  }, [localStream])
+
     const handleCameraOn = ()=>{
       const videoTracks = localStream.getVideoTracks()[0];
       videoTracks.enabled = !videoTracks.enabled;
