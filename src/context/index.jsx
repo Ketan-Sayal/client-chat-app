@@ -12,6 +12,12 @@ export const AuthContextProvider = ({children})=>{
   const [user2, setUser2] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [messages, setMessages] = useState([]);
+  const [onCall, setOnCall] = useState(false);
+  const [calling, setCalling] = useState(false);
+  const [callingUser, setCallingUser] = useState(null);
+  const [localStream, setLocalStream] = useState(null);
+  const [peer, setPeer] = useState(null);// other user stream
+  const [participants, setParticipants] = useState(null);
   const navigate = useNavigate();
   // check if user is alreADY LOGGED IN(through js cookies)
   useEffect(()=>{
@@ -60,7 +66,7 @@ export const AuthContextProvider = ({children})=>{
   }, []);
 
   return (
-    <AuthContext.Provider value={{isConnected, setUser, user, isLoading, onlineUsers, user2, setUser2, setOnlineUsers, messages, setMessages}}>
+    <AuthContext.Provider value={{isConnected, setUser, user, isLoading, onlineUsers, user2, onCall, setCalling, setOnCall, calling, setUser2, setOnlineUsers, messages, setMessages, callingUser, setCallingUser, localStream, setLocalStream, peer, setPeer, participants, setParticipants}}>
       {isLoading?(
         <p className='flex-center font-bold text-xl'>Loading...</p>
       ):(children)}

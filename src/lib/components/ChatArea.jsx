@@ -13,6 +13,8 @@ const ChatArea = ({user1, user2}) => {
   const [loading, setLoading] = useState(false);
   const [allMessages, setAllMessages] = useState(null);
   const bottomRef = useRef(null);
+  const formRef = useRef(null);
+  const {setCalling} = useAuthContext();
 
   /*Single object of all messages = {
   left,
@@ -66,6 +68,7 @@ const ChatArea = ({user1, user2}) => {
   const sendMessage = (data)=>{
     // console.log(data);
     // console.log(user2?._id);
+    formRef.current?.reset();
 
     socket.emit("new-message", {user:user1, user2, message:data?.message});
     
@@ -102,7 +105,13 @@ const ChatArea = ({user1, user2}) => {
             <p className='text-xs font-light'>{user2?.email}</p>
           </div>
         </div>
-        <FaVideo className='w-8 cursor-pointer h-8'/>
+        <FaVideo 
+        onClick={()=>{
+          // initate a Video Call by socket.io and then recive it and then add peer to peer conneection in it
+          socket.emit("new-video-call", { user:user1, user2 });
+          setCalling(true);
+        }}
+        className='w-8 cursor-pointer h-8'/>
       </div>
       {/* Chat area: */}
       <div className='h-[84%] gap-20 w-full overflow-y-scroll overflow-x-hidden scrollbar px-2 py-4 flex flex-col'>
@@ -151,7 +160,7 @@ const ChatArea = ({user1, user2}) => {
       <div>
       </div>
       </div>
-      <form onSubmit={handleSubmit(sendMessage)} className='w-full h-[11%] p-4 bg-slate-800 flex gap-8 items-center'>
+      <form ref={formRef} onSubmit={handleSubmit(sendMessage)} className='w-full h-[11%] p-4 bg-slate-800 flex gap-8 items-center'>
         <div className='flex flex-col justify-center gap-3 w-[90%] h-[90%]'>
           <input 
         {...register("message", {
