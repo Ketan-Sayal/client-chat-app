@@ -9,8 +9,8 @@ import { socket } from '../../server';
 
 const VideoComponent = ({hungUpCall}) => {
     const {peer, localStream, participants, user} = useAuthContext();
-    const [isMicOn, setIsMicOn] = useState(localStream?.getAudioTracks()[0].enabled);
-    const [isCameraOn, setIsCameraOn] = useState(localStream?.getVideoTracks()[0].enabled);
+    const [isMicOn, setIsMicOn] = useState(!!localStream?.getAudioTracks()[0].enabled || true);
+    const [isCameraOn, setIsCameraOn] = useState(!!localStream?.getVideoTracks()[0].enabled || true);
     // console.log(peer, localStream);
     // const [isOtherUserClick, setOtherUser] = useState(true);
     const handleCameraOn = ()=>{
