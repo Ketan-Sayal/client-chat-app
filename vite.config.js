@@ -12,9 +12,4 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
-  server:{
-    proxy:{
-      "/api":"https://chat-app-server-se59.onrender.com"
-    }
-  }
 })
