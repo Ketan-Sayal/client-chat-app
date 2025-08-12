@@ -30,9 +30,9 @@ const SignupForm = () => {
       
       let signupData = null;
       if(imageFile){
-        signupData = (await axios.post("https://chat-app-server-se59.onrender.com/v1/users/create", {...data})).data?.data;
+        signupData = (await axios.post("https://chat-app-server-se59.onrender.com/api/v1/users/create", {...data})).data?.data;
       }else{
-        signupData = (await axios.post("https://chat-app-server-se59.onrender.com/v1/users/create", {...data}, {headers:{
+        signupData = (await axios.post("https://chat-app-server-se59.onrender.com/api/v1/users/create", {...data}, {headers:{
         'content-type': 'multipart/form-data'
       }})).data?.data;
       }

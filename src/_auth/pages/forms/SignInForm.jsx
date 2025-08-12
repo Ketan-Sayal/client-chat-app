@@ -28,7 +28,7 @@ const SignInForm = () => {
     try {
       console.log(data);
     
-        const signInData = (await axios.post("https://chat-app-server-se59.onrender.com/v1/users/login", {...data}, {headers:{
+        const signInData = (await axios.post("https://chat-app-server-se59.onrender.com/api/v1/users/login", {...data}, {headers:{
         'content-type': 'multipart/form-data'
       }})).data?.data;
      // If everything wnt well then set the token as cookie and also set the user
