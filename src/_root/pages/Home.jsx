@@ -7,6 +7,7 @@ import sound from "../../assets/sound.mp3";
 import { socket } from '../../server';
 import VideoNotification from '../../lib/components/VideoNotification';
 import VideoComponent from '../../lib/components/VideoComponent';
+import { config } from '../../config';
 
 /**
  * peer = {
@@ -102,7 +103,27 @@ const Home = () => {
     config: {
       iceServers: [
         { urls: 'stun:stun.l.google.com:19302' },
-        { urls: 'stun:global.stun.twilio.com:3478' }
+        { urls: 'stun:global.stun.twilio.com:3478' },
+        {
+          urls: "turn:global.relay.metered.ca:80",
+          username: config.meteredUsername,
+          credential: config.meteredPassword,
+      },
+      {
+        urls: "turn:global.relay.metered.ca:80?transport=tcp",
+        username: config.meteredUsername,
+          credential: config.meteredPassword,
+      },
+      {
+        urls: "turn:global.relay.metered.ca:443",
+        username: config.meteredUsername,
+          credential: config.meteredPassword,
+      },
+      {
+        urls: "turns:global.relay.metered.ca:443?transport=tcp",
+        username: config.meteredUsername,
+          credential: config.meteredPassword,
+      },
       ]
     }
   });
