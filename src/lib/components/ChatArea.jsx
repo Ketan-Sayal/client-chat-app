@@ -33,7 +33,7 @@ const ChatArea = ({user1, user2}) => {
     if(user2){
       setLoading(true);
     const token = Cookies.get("chat-app-token");
-    axios.get(`/api/v1/messages/messages/${user2?._id}`, {
+    axios.get(`https://chat-app-server-se59.onrender.com/v1/messages/messages/${user2?._id}`, {
       headers:{
         token
       }
@@ -75,7 +75,7 @@ const ChatArea = ({user1, user2}) => {
     setMessages([...messages, {left:false, message:data?.message}])
 
     const token = Cookies.get("chat-app-token");
-    axios.post("/api/v1/messages/create", {...data, user2Id:user2?._id}, {
+    axios.post("https://chat-app-server-se59.onrender.com/v1/messages/create", {...data, user2Id:user2?._id}, {
       headers:{
         token
       }

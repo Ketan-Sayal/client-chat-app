@@ -26,7 +26,7 @@ export const AuthContextProvider = ({children})=>{
     
     if(token){
       setIsLoading(true);
-      axios.get("/api/v1/users/user/info", {headers:{
+      axios.get("https://chat-app-server-se59.onrender.com/v1/users/user/info", {headers:{
         token,
       }}).then((res)=>{
         setUser(res.data?.data.user);

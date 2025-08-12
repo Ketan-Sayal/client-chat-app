@@ -14,7 +14,7 @@ export default defineConfig({
   ],
   server:{
     proxy:{
-      "/api":"http://localhost:80"
+      "/api":"https://chat-app-server-se59.onrender.com"
     }
   }
 })
